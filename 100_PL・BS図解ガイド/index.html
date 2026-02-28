@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PL・BS 図解ガイド｜中学生でもわかる！お金の成績表</title>
+    <style>
+        /* ========================================
+           リセット & ベース
+           ======================================== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', 'Hiragino Sans', 'Meiryo', sans-serif;
+            background: #f0f2f5;
+            color: #333;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           ナビゲーション（目次）
+           ======================================== */
+        .toc {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+            z-index: 1000;
+            padding: 12px 20px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .toc a {
+            text-decoration: none;
+            color: #555;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        .toc a:hover { background: #667eea; color: #fff; }
+        .toc a.bs-link:hover { background: #4a90d9; }
+        .toc a.pl-link:hover { background: #e06b5f; }
+
+        /* ========================================
+           メインコンテナ
+           ======================================== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 20px 60px;
+        }
+
+        /* ========================================
+           ヒーローセクション
+           ======================================== */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 24px;
+            color: #fff;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: heroGlow 8s ease-in-out infinite;
+        }
+        @keyframes heroGlow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -30px); }
+        }
+        .hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .hero .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+        }
+        .hero .emoji-row {
+            font-size: 2.5rem;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        /* ========================================
+           セクション共通
+           ======================================== */
+        section {
+            margin-bottom: 50px;
+            scroll-margin-top: 70px;
+        }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .section-title .icon {
+            font-size: 1.8rem;
+        }
+
+        /* ========================================
+           カード
+           ======================================== */
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            color: #444;
+        }
+        .card p, .card li {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .card ul { padding-left: 20px; }
+
+        /* BS色テーマ */
+        .card.bs-theme { border-left: 5px solid #4a90d9; }
+        .card.bs-theme h3 { color: #4a90d9; }
+
+        /* PL色テーマ */
+        .card.pl-theme { border-left: 5px solid #e06b5f; }
+        .card.pl-theme h3 { color: #e06b5f; }
+
+        /* ハイライト */
+        .card.highlight {
+            background: linear-gradient(135deg, #fff9e6, #fff3cc);
+            border-left: 5px solid #f5a623;
+        }
+
+        /* ========================================
+           たとえ話ボックス
+           ======================================== */
+        .analogy {
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-left: 4px solid #66bb6a;
+        }
+        .analogy .analogy-title {
+            font-weight: 700;
+            color: #388e3c;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+        .analogy p {
+            color: #444;
+            margin-bottom: 0;
+        }
+
+        /* ========================================
+           重要ポイントボックス
+           ======================================== */
+        .point-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            border-left: 4px solid #ff9800;
+        }
+        .point-box .point-title {
+            font-weight: 700;
+            color: #e65100;
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+        }
+
+        /* ========================================
+           数式ボックス
+           ======================================== */
+        .formula {
+            background: linear-gradient(135deg, #ede7f6, #d1c4e9);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .formula .formula-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #4527a0;
+            letter-spacing: 2px;
+        }
+        .formula .formula-sub {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* ========================================
+           BS 図解 - T字勘定
+           ======================================== */
+        .bs-diagram {
+            display: flex;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 320px;
+        }
+        .bs-left {
+            flex: 1;
+            background: linear-gradient(180deg, #42a5f5, #1976d2);
+            padding: 24px;
+            color: #fff;
+        }
+        .bs-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .bs-right-top {
+            flex: 1;
+            background: linear-gradient(180deg, #ef5350, #c62828);
+            padding: 24px;
+            color: #fff;
+        }
+        .bs-right-bottom {
+            flex: 1;
+            background: linear-gradient(180deg, #66bb6a, #2e7d32);
+            padding: 24px;
+            color: #fff;
+        }
+        .bs-diagram .side-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.9;
+        }
+        .bs-diagram .side-label {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .bs-diagram .side-items {
+            list-style: none;
+            padding: 0;
+        }
+        .bs-diagram .side-items li {
+            padding: 6px 0;
+            font-size: 0.95rem;
+            opacity: 0.95;
+            color: #fff;
+            margin-bottom: 0;
+        }
+        .bs-diagram .side-items li::before {
+            margin-right: 8px;
+        }
+
+        /* ========================================
+           BS 図解 - ビジュアルバランス
+           ======================================== */
+        .balance-visual {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 40px;
+            padding: 30px 20px;
+            margin: 20px 0;
+        }
+        .balance-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .balance-bar .bar {
+            width: 120px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 10px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: height 0.5s;
+        }
+        .balance-bar .bar-label {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .bar.asset-bar {
+            background: linear-gradient(180deg, #42a5f5, #1976d2);
+            height: 200px;
+        }
+        .bar.liability-bar {
+            background: linear-gradient(180deg, #ef5350, #c62828);
+            height: 140px;
+        }
+        .bar.networth-bar {
+            background: linear-gradient(180deg, #66bb6a, #2e7d32);
+            height: 60px;
+        }
+        .equal-sign {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #888;
+            align-self: center;
+        }
+        .plus-sign {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #888;
+            align-self: center;
+        }
+
+        /* ========================================
+           PL 図解 - フローチャート
+           ======================================== */
+        .pl-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin: 20px 0;
+        }
+        .pl-flow-item {
+            width: 280px;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #fff;
+            position: relative;
+        }
+        .pl-flow-item.income {
+            background: linear-gradient(135deg, #42a5f5, #1976d2);
+        }
+        .pl-flow-item.expense {
+            background: linear-gradient(135deg, #ef5350, #c62828);
+        }
+        .pl-flow-item.profit {
+            background: linear-gradient(135deg, #66bb6a, #2e7d32);
+        }
+        .pl-flow-item.loss {
+            background: linear-gradient(135deg, #ff7043, #d84315);
+        }
+        .pl-flow-arrow {
+            width: 4px;
+            height: 36px;
+            background: #bbb;
+            position: relative;
+        }
+        .pl-flow-arrow::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid #bbb;
+        }
+        .pl-flow-label {
+            font-size: 0.9rem;
+            color: #888;
+            font-weight: 600;
+            padding: 4px 0;
+        }
+
+        /* ========================================
+           PL ウォーターフォール
+           ======================================== */
+        .waterfall {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px 20px 10px;
+            margin: 20px 0;
+            position: relative;
+        }
+        .waterfall::before {
+            content: '';
+            position: absolute;
+            bottom: 50px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: #ddd;
+        }
+        .wf-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .wf-bar {
+            width: 100px;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .wf-bar.income-bar {
+            background: linear-gradient(180deg, #42a5f5, #1976d2);
+            height: 180px;
+        }
+        .wf-bar.expense-bar {
+            background: linear-gradient(180deg, #ef5350, #c62828);
+            height: 130px;
+        }
+        .wf-bar.result-bar.positive {
+            background: linear-gradient(180deg, #66bb6a, #2e7d32);
+            height: 50px;
+        }
+        .wf-bar.result-bar.negative {
+            background: linear-gradient(180deg, #ff7043, #d84315);
+            height: 50px;
+        }
+        .wf-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        /* ========================================
+           つながり図（BS ↔ PL）
+           ======================================== */
+        .connection-diagram {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        .conn-box {
+            width: 200px;
+            padding: 24px 16px;
+            border-radius: 16px;
+            text-align: center;
+            color: #fff;
+            font-weight: 700;
+        }
+        .conn-box.bs-box {
+            background: linear-gradient(135deg, #42a5f5, #1565c0);
+        }
+        .conn-box.pl-box {
+            background: linear-gradient(135deg, #ef5350, #b71c1c);
+        }
+        .conn-box .conn-icon { font-size: 2rem; margin-bottom: 8px; }
+        .conn-box .conn-title { font-size: 1.1rem; }
+        .conn-box .conn-sub { font-size: 0.8rem; opacity: 0.85; margin-top: 4px; }
+        .conn-arrow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .conn-arrow .arrow-line {
+            font-size: 2rem;
+            color: #888;
+        }
+        .conn-arrow .arrow-label {
+            font-size: 0.75rem;
+            color: #888;
+            font-weight: 600;
+        }
+
+        /* ========================================
+           具体例セクション
+           ======================================== */
+        .example-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .example-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        .example-item .ex-icon { font-size: 2rem; margin-bottom: 8px; }
+        .example-item .ex-name { font-weight: 700; font-size: 0.95rem; color: #444; }
+        .example-item .ex-amount { font-weight: 800; font-size: 1.1rem; margin-top: 4px; }
+        .example-item .ex-amount.blue { color: #1976d2; }
+        .example-item .ex-amount.red { color: #c62828; }
+        .example-item .ex-amount.green { color: #2e7d32; }
+
+        /* ========================================
+           タイムライン
+           ======================================== */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 20px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 24px;
+            padding: 16px 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 20px;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        .timeline-item .tl-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .timeline-item .tl-body {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        /* ========================================
+           比較テーブル
+           ======================================== */
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 16px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .compare-table th {
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        .compare-table td {
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        .compare-table thead th {
+            background: #667eea;
+            color: #fff;
+        }
+        .compare-table thead th:first-child { border-radius: 12px 0 0 0; }
+        .compare-table thead th:last-child { border-radius: 0 12px 0 0; }
+        .compare-table .bs-col { background: #e3f2fd; }
+        .compare-table .pl-col { background: #ffebee; }
+        .compare-table tbody tr:hover { background: #f5f5f5; }
+
+        /* ========================================
+           ステップ図
+           ======================================== */
+        .steps {
+            display: flex;
+            gap: 16px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .step {
+            flex: 1;
+            min-width: 180px;
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            position: relative;
+        }
+        .step .step-num {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            margin: 0 auto 12px;
+        }
+        .step .step-icon { font-size: 1.8rem; margin-bottom: 8px; }
+        .step .step-title { font-weight: 700; font-size: 0.95rem; color: #333; }
+        .step .step-desc { font-size: 0.85rem; color: #666; margin-top: 6px; }
+
+        /* ========================================
+           個人BS具体例 - 図解
+           ======================================== */
+        .personal-bs {
+            display: flex;
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .personal-bs .left-side {
+            flex: 1;
+            background: linear-gradient(180deg, #e3f2fd, #bbdefb);
+            padding: 24px;
+        }
+        .personal-bs .right-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .personal-bs .right-top {
+            flex: 3;
+            background: linear-gradient(180deg, #ffebee, #ffcdd2);
+            padding: 24px;
+        }
+        .personal-bs .right-bottom {
+            flex: 0.3;
+            background: linear-gradient(180deg, #e8f5e9, #c8e6c9);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+        }
+        .personal-bs .side-header {
+            font-weight: 800;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .personal-bs .side-header.blue { color: #1565c0; }
+        .personal-bs .side-header.red { color: #b71c1c; }
+        .personal-bs .side-header.green { color: #2e7d32; }
+        .personal-bs .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .personal-bs .item-row:last-child { border-bottom: none; }
+        .personal-bs .item-name { color: #555; }
+        .personal-bs .item-value { font-weight: 700; }
+        .personal-bs .item-value.blue { color: #1565c0; }
+        .personal-bs .item-value.red { color: #b71c1c; }
+        .personal-bs .item-value.green { color: #2e7d32; }
+        .personal-bs .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 800;
+            font-size: 1rem;
+            padding-top: 8px;
+            margin-top: 4px;
+            border-top: 2px solid rgba(0,0,0,0.15);
+        }
+        .networth-negative {
+            color: #b71c1c;
+            font-weight: 800;
+        }
+
+        /* ========================================
+           個人PL具体例 - 図解
+           ======================================== */
+        .personal-pl {
+            border-radius: 16px;
+            overflow: hidden;
+            margin: 20px 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .personal-pl .pl-section {
+            padding: 24px;
+        }
+        .personal-pl .income-section {
+            background: linear-gradient(180deg, #e3f2fd, #bbdefb);
+        }
+        .personal-pl .expense-section {
+            background: linear-gradient(180deg, #ffebee, #ffcdd2);
+        }
+        .personal-pl .result-section {
+            padding: 16px 24px;
+        }
+        .personal-pl .result-section.positive {
+            background: linear-gradient(180deg, #e8f5e9, #c8e6c9);
+        }
+        .personal-pl .result-section.negative {
+            background: linear-gradient(180deg, #fff3e0, #ffe0b2);
+        }
+
+        /* ========================================
+           クイズセクション
+           ======================================== */
+        .quiz-box {
+            background: linear-gradient(135deg, #e8eaf6, #c5cae9);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 16px 0;
+        }
+        .quiz-box .quiz-q {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #283593;
+            margin-bottom: 12px;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .quiz-option {
+            background: #fff;
+            border: 2px solid #c5cae9;
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        .quiz-option:hover { border-color: #5c6bc0; background: #f5f5ff; }
+        .quiz-option.correct {
+            border-color: #43a047;
+            background: #e8f5e9;
+        }
+        .quiz-option.wrong {
+            border-color: #e53935;
+            background: #ffebee;
+        }
+        .quiz-answer {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #fff;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .quiz-answer.show { display: block; }
+
+        /* ========================================
+           まとめカード
+           ======================================== */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .summary-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .summary-card .sc-icon { font-size: 2.2rem; margin-bottom: 8px; }
+        .summary-card .sc-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; }
+        .summary-card .sc-desc { font-size: 0.85rem; color: #666; line-height: 1.6; }
+
+        /* ========================================
+           フッター
+           ======================================== */
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-size: 0.85rem;
+        }
+
+        /* ========================================
+           区切り線
+           ======================================== */
+        .divider {
+            border: none;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+            margin: 40px 0;
+        }
+
+        /* ========================================
+           レスポンシブ
+           ======================================== */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.6rem; }
+            .bs-diagram { flex-direction: column; min-height: auto; }
+            .balance-visual { flex-wrap: wrap; gap: 16px; }
+            .balance-bar .bar { width: 80px; }
+            .bar.asset-bar { height: 140px; }
+            .bar.liability-bar { height: 100px; }
+            .bar.networth-bar { height: 40px; }
+            .connection-diagram { flex-direction: column; }
+            .example-grid { grid-template-columns: 1fr; }
+            .personal-bs { flex-direction: column; }
+            .summary-grid { grid-template-columns: 1fr; }
+            .steps { flex-direction: column; }
+            .wf-bar { width: 70px; }
+            .wf-bar.income-bar { height: 120px; }
+            .wf-bar.expense-bar { height: 90px; }
+            .compare-table { font-size: 0.8rem; }
+            .compare-table th, .compare-table td { padding: 8px 10px; }
+            .toc { gap: 4px; padding: 8px 12px; }
+            .toc a { font-size: 0.75rem; padding: 4px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     ナビゲーション
+     ======================================== -->
+<nav class="toc">
+    <a href="#intro">はじめに</a>
+    <a href="#bs" class="bs-link">BS とは</a>
+    <a href="#bs-detail" class="bs-link">BS 図解</a>
+    <a href="#pl" class="pl-link">PL とは</a>
+    <a href="#pl-detail" class="pl-link">PL 図解</a>
+    <a href="#connection">つながり</a>
+    <a href="#example">具体例</a>
+    <a href="#quiz">クイズ</a>
+    <a href="#summary">まとめ</a>
+</nav>
+
+<div class="container">
+
+    <!-- ========================================
+         ヒーロー
+         ======================================== -->
+    <div class="hero">
+        <div class="emoji-row">💰 📊 🏦</div>
+        <h1>PL・BS 図解ガイド</h1>
+        <p class="subtitle">中学生でもわかる！お金の「成績表」を読もう</p>
+    </div>
+
+    <!-- ========================================
+         はじめに
+         ======================================== -->
+    <section id="intro">
+        <h2 class="section-title"><span class="icon">📖</span> はじめに</h2>
+
+        <div class="card">
+            <h3>BS と PL ってなに？</h3>
+            <p>お金の管理には、<strong>2つの大事な「成績表」</strong>があります。</p>
+            <p>難しそうに聞こえるけど、実はとてもシンプル。日常生活でみんなが自然にやっていることです。</p>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card" style="border-top: 4px solid #4a90d9;">
+                <div class="sc-icon">📸</div>
+                <div class="sc-title" style="color: #4a90d9;">BS（バランスシート）</div>
+                <div class="sc-desc">ある時点の「財産の写真」<br>今いくら持っていて、いくら借りているか</div>
+            </div>
+            <div class="summary-card" style="border-top: 4px solid #e06b5f;">
+                <div class="sc-icon">🎬</div>
+                <div class="sc-title" style="color: #e06b5f;">PL（損益計算書）</div>
+                <div class="sc-desc">一定期間の「お金の動画」<br>いくら稼いで、いくら使ったか</div>
+            </div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 たとえ話：健康診断で考えてみよう</div>
+            <p><strong>BS</strong> = 体重計にのった瞬間の数値（今のからだの状態）<br>
+               <strong>PL</strong> = 1ヶ月の食事記録と運動記録（太ったか痩せたかの原因）</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         BS とは
+         ======================================== -->
+    <section id="bs">
+        <h2 class="section-title"><span class="icon">🏦</span> BS（バランスシート）とは</h2>
+
+        <div class="card bs-theme">
+            <h3>BS = 「今、お金がどうなっているか」の写真</h3>
+            <p>BSは <strong>Balance Sheet</strong>（バランスシート）の略。日本語では<strong>「貸借対照表」</strong>と呼びます。</p>
+            <p>ある<strong>1つの時点</strong>（たとえば3月31日）に、</p>
+            <ul>
+                <li>💙 <strong>資産</strong>（しさん）：自分が持っているもの・お金</li>
+                <li>❤️ <strong>負債</strong>（ふさい）：誰かに返さないといけないお金</li>
+                <li>💚 <strong>純資産</strong>（じゅんしさん）：本当に自分のもの</li>
+            </ul>
+            <p>この3つを一覧にしたものです。</p>
+        </div>
+
+        <div class="formula">
+            <div class="formula-text">資産 ＝ 負債 ＋ 純資産</div>
+            <div class="formula-sub">持っているもの ＝ 借りているぶん ＋ 本当に自分のぶん</div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 たとえ話：お財布の中身チェック</div>
+            <p>お財布に <strong>1,000円</strong> 入っている。でもそのうち <strong>300円</strong> は友達から借りたお金。<br>
+            → 資産: 1,000円 ／ 負債: 300円 ／ 純資産: <strong>700円</strong>（本当に自分のお金）</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         BS 図解
+         ======================================== -->
+    <section id="bs-detail">
+        <h2 class="section-title"><span class="icon">📊</span> BS を図で理解しよう</h2>
+
+        <div class="card">
+            <h3>BS の基本構造（T字フォーム）</h3>
+            <p>BSは左右に分けて書きます。<strong>左側と右側は必ず同じ金額</strong>になります。だから「バランス」シートなのです。</p>
+        </div>
+
+        <div class="bs-diagram">
+            <div class="bs-left">
+                <div class="side-title">◀ 左がわ</div>
+                <div class="side-label">💙 資産（しさん）</div>
+                <ul class="side-items">
+                    <li>🏦 銀行の預金</li>
+                    <li>💴 手元の現金</li>
+                    <li>🏠 持っている家や車</li>
+                    <li>📈 株や投資信託</li>
+                </ul>
+                <div style="margin-top: 16px; opacity: 0.8; font-size: 0.85rem;">
+                    「何を持っているか」
+                </div>
+            </div>
+            <div class="bs-right">
+                <div class="bs-right-top">
+                    <div class="side-title">右がわ ▶</div>
+                    <div class="side-label">❤️ 負債（ふさい）</div>
+                    <ul class="side-items">
+                        <li>💳 カードローン</li>
+                        <li>🏠 住宅ローン</li>
+                        <li>📱 クレカの未払い</li>
+                    </ul>
+                    <div style="margin-top: 8px; opacity: 0.8; font-size: 0.85rem;">
+                        「いくら借りているか」
+                    </div>
+                </div>
+                <div class="bs-right-bottom">
+                    <div>
+                        <div class="side-label">💚 純資産</div>
+                        <div style="opacity: 0.9; font-size: 0.85rem;">資産 − 負債 ＝ 本当の財産</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="point-box">
+            <div class="point-title">⚖️ なぜ「バランス」？</div>
+            <p>左側（資産）の合計と、右側（負債 + 純資産）の合計は<strong>必ず一致</strong>します。<br>
+            これは「持っているお金の出どころ」を表しているからです。<br>
+            自分のお金か、借りたお金か ― どちらかに必ず分類されます。</p>
+        </div>
+
+        <div class="card">
+            <h3>バーグラフで見る BS</h3>
+            <p>資産（青）から負債（赤）を引くと、純資産（緑）が残ります。</p>
+        </div>
+
+        <div class="balance-visual">
+            <div class="balance-bar">
+                <div class="bar asset-bar">¥500K</div>
+                <div class="bar-label">💙 資産</div>
+            </div>
+            <div class="equal-sign">=</div>
+            <div class="balance-bar">
+                <div class="bar liability-bar">¥350K</div>
+                <div class="bar-label">❤️ 負債</div>
+            </div>
+            <div class="plus-sign">+</div>
+            <div class="balance-bar">
+                <div class="bar networth-bar">¥150K</div>
+                <div class="bar-label">💚 純資産</div>
+            </div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 たとえ話：ゲームで考えてみよう</div>
+            <p>RPGのステータス画面を想像してください。<br>
+            <strong>HP（体力）</strong>= 資産、<strong>毒のダメージ（じわじわ減る）</strong>= 負債、<strong>実際に戦える体力</strong>= 純資産<br>
+            毒（借金）が多すぎると、見た目のHPが高くても実は戦えない！</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         PL とは
+         ======================================== -->
+    <section id="pl">
+        <h2 class="section-title"><span class="icon">💰</span> PL（損益計算書）とは</h2>
+
+        <div class="card pl-theme">
+            <h3>PL = 「お金がどう動いたか」の記録</h3>
+            <p>PLは <strong>Profit and Loss Statement</strong>（プロフィット・アンド・ロス）の略。日本語では<strong>「損益計算書」</strong>。</p>
+            <p><strong>一定期間</strong>（たとえば1ヶ月、1年）の間に、</p>
+            <ul>
+                <li>💙 <strong>収入</strong>（しゅうにゅう）：入ってきたお金</li>
+                <li>❤️ <strong>支出</strong>（ししゅつ）：出ていったお金</li>
+                <li>📊 <strong>収支</strong>（しゅうし）：差し引きの結果</li>
+            </ul>
+            <p>を記録したものです。</p>
+        </div>
+
+        <div class="formula">
+            <div class="formula-text">収入 − 支出 ＝ 収支（損益）</div>
+            <div class="formula-sub">入ってきたお金 − 出ていったお金 ＝ プラスなら黒字、マイナスなら赤字</div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 たとえ話：お小遣い帳</div>
+            <p>今月のお小遣い <strong>3,000円</strong> もらった。ゲームに <strong>1,500円</strong>、おやつに <strong>500円</strong> 使った。<br>
+            → 収入: 3,000円 ／ 支出: 2,000円 ／ 収支: <strong>+1,000円の黒字！</strong> 🎉</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         PL 図解
+         ======================================== -->
+    <section id="pl-detail">
+        <h2 class="section-title"><span class="icon">📈</span> PL を図で理解しよう</h2>
+
+        <div class="card">
+            <h3>PL の流れ</h3>
+            <p>収入から支出を引いて、残りが「黒字」か「赤字」かを見ます。</p>
+        </div>
+
+        <div class="pl-flow">
+            <div class="pl-flow-item income">💙 収入（入ってくるお金）<br><small>給料、お小遣い、副業…</small></div>
+            <div class="pl-flow-arrow"></div>
+            <div class="pl-flow-label">ここから使ったぶんを引く ▼</div>
+            <div class="pl-flow-arrow"></div>
+            <div class="pl-flow-item expense">❤️ 支出（出ていくお金）<br><small>家賃、食費、スマホ代…</small></div>
+            <div class="pl-flow-arrow"></div>
+            <div class="pl-flow-label">残りは… ▼</div>
+            <div class="pl-flow-arrow"></div>
+            <div class="pl-flow-item profit">✅ 黒字（収入 ＞ 支出）<br><small>お金が増えた！</small></div>
+            <div style="color: #999; font-size: 0.85rem; margin: 8px 0;">または</div>
+            <div class="pl-flow-item loss">⚠️ 赤字（収入 ＜ 支出）<br><small>お金が減った…</small></div>
+        </div>
+
+        <div class="card">
+            <h3>ウォーターフォールチャート</h3>
+            <p>収入の棒から支出の棒を引いて、結果の棒が残ります。</p>
+        </div>
+
+        <div class="waterfall">
+            <div class="wf-item">
+                <div class="wf-bar income-bar">¥30万</div>
+                <div class="wf-label">💙 収入</div>
+            </div>
+            <div class="wf-item">
+                <div style="font-size: 2rem; color: #888; margin-bottom: 60px;">−</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-bar expense-bar">¥22万</div>
+                <div class="wf-label">❤️ 支出</div>
+            </div>
+            <div class="wf-item">
+                <div style="font-size: 2rem; color: #888; margin-bottom: 100px;">＝</div>
+            </div>
+            <div class="wf-item">
+                <div class="wf-bar result-bar positive">¥8万</div>
+                <div class="wf-label">💚 黒字</div>
+            </div>
+        </div>
+
+        <div class="point-box">
+            <div class="point-title">📌 黒字と赤字</div>
+            <p><strong>黒字（くろじ）</strong>：収入 ＞ 支出 → お金が余った → 貯金が増える 🎉<br>
+            <strong>赤字（あかじ）</strong>：収入 ＜ 支出 → お金が足りない → 貯金を崩すか借金が増える 😰</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         BS と PL のつながり
+         ======================================== -->
+    <section id="connection">
+        <h2 class="section-title"><span class="icon">🔗</span> BS と PL のつながり</h2>
+
+        <div class="card highlight">
+            <h3>BS と PL は別物じゃない！</h3>
+            <p>BS と PL は<strong>セット</strong>で見るものです。PLの結果が、BSに反映されます。</p>
+        </div>
+
+        <div class="connection-diagram">
+            <div class="conn-box pl-box">
+                <div class="conn-icon">📊</div>
+                <div class="conn-title">PL（損益）</div>
+                <div class="conn-sub">今月は+5万円の黒字だった</div>
+            </div>
+            <div class="conn-arrow">
+                <div class="arrow-label">結果が反映</div>
+                <div class="arrow-line">→</div>
+            </div>
+            <div class="conn-box bs-box">
+                <div class="conn-icon">🏦</div>
+                <div class="conn-title">BS（残高）</div>
+                <div class="conn-sub">純資産が+5万円増えた</div>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="tl-title">📸 3月末のBS（スタート）</div>
+                <div class="tl-body">預金: 50万円 ／ ローン: 350万円 ／ 純資産: <strong>-300万円</strong></div>
+            </div>
+            <div class="timeline-item">
+                <div class="tl-title">🎬 4月のPL（1ヶ月の活動）</div>
+                <div class="tl-body">収入: 30万円 ／ 支出: 22万円 → <strong>+8万円の黒字</strong></div>
+            </div>
+            <div class="timeline-item">
+                <div class="tl-title">📸 4月末のBS（結果）</div>
+                <div class="tl-body">預金: 58万円（+8万円）／ ローン: 350万円 ／ 純資産: <strong>-292万円</strong>（8万円改善！）</div>
+            </div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 たとえ話：ダムと川</div>
+            <p><strong>BS</strong> = ダムの水位（今どのくらい水がたまっているか）<br>
+            <strong>PL</strong> = 川の水の流れ（どのくらい水が入ってきて、どのくらい流れ出たか）<br>
+            川の水（PL）がたくさん入ってくれば、ダムの水位（BS）は上がります！</p>
+        </div>
+
+        <div class="card">
+            <h3>BS と PL の比較表</h3>
+        </div>
+
+        <table class="compare-table">
+            <thead>
+                <tr>
+                    <th>比較ポイント</th>
+                    <th>🏦 BS（バランスシート）</th>
+                    <th>📊 PL（損益計算書）</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>日本語名</strong></td>
+                    <td class="bs-col">貸借対照表</td>
+                    <td class="pl-col">損益計算書</td>
+                </tr>
+                <tr>
+                    <td><strong>たとえ</strong></td>
+                    <td class="bs-col">📸 写真（ある瞬間）</td>
+                    <td class="pl-col">🎬 動画（期間の記録）</td>
+                </tr>
+                <tr>
+                    <td><strong>見るもの</strong></td>
+                    <td class="bs-col">資産・負債・純資産</td>
+                    <td class="pl-col">収入・支出・収支</td>
+                </tr>
+                <tr>
+                    <td><strong>いつの情報？</strong></td>
+                    <td class="bs-col">○月○日<strong>時点</strong></td>
+                    <td class="pl-col">○月の<strong>1ヶ月間</strong></td>
+                </tr>
+                <tr>
+                    <td><strong>わかること</strong></td>
+                    <td class="bs-col">どのくらい裕福か</td>
+                    <td class="pl-col">お金の使い方が上手か</td>
+                </tr>
+                <tr>
+                    <td><strong>数式</strong></td>
+                    <td class="bs-col">資産 ＝ 負債 ＋ 純資産</td>
+                    <td class="pl-col">収入 − 支出 ＝ 収支</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         具体例
+         ======================================== -->
+    <section id="example">
+        <h2 class="section-title"><span class="icon">📝</span> 具体例で見てみよう</h2>
+
+        <div class="card">
+            <h3>🧑 Aさんの場合</h3>
+            <p>会社から給料をもらい、一人暮らしをしているAさん。カードローンの返済をがんばっています。</p>
+        </div>
+
+        <!-- BS 具体例 -->
+        <div class="card bs-theme">
+            <h3>Aさんの BS（2月28日 時点）</h3>
+        </div>
+
+        <div class="personal-bs">
+            <div class="left-side">
+                <div class="side-header blue">💙 資産（持っているもの）</div>
+                <div class="item-row">
+                    <span class="item-name">🏦 楽天銀行</span>
+                    <span class="item-value blue">¥437,468</span>
+                </div>
+                <div class="item-row">
+                    <span class="item-name">🏦 みずほ銀行</span>
+                    <span class="item-value blue">¥40,836</span>
+                </div>
+                <div class="item-row">
+                    <span class="item-name">🏦 ゆうちょ銀行</span>
+                    <span class="item-value blue">¥24,150</span>
+                </div>
+                <div class="total-row">
+                    <span>資産合計</span>
+                    <span class="item-value blue">¥502,454</span>
+                </div>
+            </div>
+            <div class="right-side">
+                <div class="right-top">
+                    <div class="side-header red">❤️ 負債（返すべきお金）</div>
+                    <div class="item-row">
+                        <span class="item-name">💳 カードローン</span>
+                        <span class="item-value red">¥3,466,152</span>
+                    </div>
+                    <div class="total-row">
+                        <span>負債合計</span>
+                        <span class="item-value red">¥3,466,152</span>
+                    </div>
+                </div>
+                <div class="right-bottom">
+                    <div style="width: 100%;">
+                        <div class="side-header green" style="margin-bottom: 4px;">💚 純資産</div>
+                        <div style="text-align: right;">
+                            <span class="networth-negative">−¥2,963,698</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="point-box">
+            <div class="point-title">😰 純資産がマイナスってどういうこと？</div>
+            <p>持っているお金（約50万円）より、借りているお金（約346万円）の方が多い状態。<br>
+            <strong>今すべてを返そうとしても、約296万円足りない</strong>ということ。<br>
+            でも大丈夫！毎月コツコツ返せば、いつかプラスになります。</p>
+        </div>
+
+        <!-- PL 具体例 -->
+        <div class="card pl-theme">
+            <h3>Aさんの PL（2月の1ヶ月間）</h3>
+        </div>
+
+        <div class="personal-pl">
+            <div class="pl-section income-section">
+                <div class="side-header blue">💙 収入（入ってきたお金）</div>
+                <div class="item-row">
+                    <span class="item-name">💼 給料</span>
+                    <span class="item-value blue">¥0</span>
+                </div>
+                <div class="total-row">
+                    <span>収入合計</span>
+                    <span class="item-value blue">¥0</span>
+                </div>
+            </div>
+            <div class="pl-section expense-section">
+                <div class="side-header red">❤️ 支出（出ていったお金）</div>
+                <div class="item-row">
+                    <span class="item-name">🏠 生活固定費（家賃・光熱費・通信費）</span>
+                    <span class="item-value red">¥104,000</span>
+                </div>
+                <div class="total-row">
+                    <span>支出合計</span>
+                    <span class="item-value red">¥104,000</span>
+                </div>
+            </div>
+            <div class="pl-section result-section negative">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: 700; font-size: 1rem;">📊 今月の収支</span>
+                    <span style="font-weight: 800; font-size: 1.2rem; color: #d84315;">−¥104,000（赤字）</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analogy">
+            <div class="analogy-title">💡 この数字はBSにどう影響する？</div>
+            <p>2月は10.4万円の赤字だったので、<strong>来月のBSでは預金が10.4万円減っている</strong>はず。<br>
+            PLの赤字・黒字が、次のBSの数字を変えていくのです。</p>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         クイズ
+         ======================================== -->
+    <section id="quiz">
+        <h2 class="section-title"><span class="icon">🧠</span> 理解度チェック！クイズ</h2>
+
+        <!-- クイズ1 -->
+        <div class="quiz-box">
+            <div class="quiz-q">Q1. BS（バランスシート）は何を表している？</div>
+            <div class="quiz-options" id="quiz1">
+                <div class="quiz-option" onclick="checkAnswer('quiz1', this, false)">A. 1ヶ月間の収入と支出</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz1', this, true)">B. ある時点の資産・負債・純資産</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz1', this, false)">C. 来月の予算計画</div>
+            </div>
+            <div class="quiz-answer" id="quiz1-answer">
+                ✅ <strong>正解は B</strong>！ BSは「ある時点（写真）」の財産の状態を表します。1ヶ月間の記録はPLのほうです。
+            </div>
+        </div>
+
+        <!-- クイズ2 -->
+        <div class="quiz-box">
+            <div class="quiz-q">Q2. 資産50万円、負債80万円。純資産はいくら？</div>
+            <div class="quiz-options" id="quiz2">
+                <div class="quiz-option" onclick="checkAnswer('quiz2', this, false)">A. 130万円</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz2', this, false)">B. 80万円</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz2', this, true)">C. −30万円</div>
+            </div>
+            <div class="quiz-answer" id="quiz2-answer">
+                ✅ <strong>正解は C</strong>！ 純資産 = 資産 − 負債 = 50万 − 80万 = <strong>−30万円</strong>。借金のほうが多い状態です。
+            </div>
+        </div>
+
+        <!-- クイズ3 -->
+        <div class="quiz-box">
+            <div class="quiz-q">Q3. 今月の収入20万円、支出15万円。PLの結果は？</div>
+            <div class="quiz-options" id="quiz3">
+                <div class="quiz-option" onclick="checkAnswer('quiz3', this, true)">A. 5万円の黒字</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz3', this, false)">B. 5万円の赤字</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz3', this, false)">C. 35万円の黒字</div>
+            </div>
+            <div class="quiz-answer" id="quiz3-answer">
+                ✅ <strong>正解は A</strong>！ 収支 = 収入 − 支出 = 20万 − 15万 = <strong>+5万円の黒字</strong>。来月のBSでは預金が5万円増えます。
+            </div>
+        </div>
+
+        <!-- クイズ4 -->
+        <div class="quiz-box">
+            <div class="quiz-q">Q4. PLで毎月黒字を出すと、BSはどうなる？</div>
+            <div class="quiz-options" id="quiz4">
+                <div class="quiz-option" onclick="checkAnswer('quiz4', this, false)">A. 負債が増える</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz4', this, true)">B. 純資産が増える</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz4', this, false)">C. 何も変わらない</div>
+            </div>
+            <div class="quiz-answer" id="quiz4-answer">
+                ✅ <strong>正解は B</strong>！ PLの黒字は、BSの純資産を増やします。毎月コツコツ黒字を出すことが、財産を増やす基本です。
+            </div>
+        </div>
+
+        <!-- クイズ5 -->
+        <div class="quiz-box">
+            <div class="quiz-q">Q5. BSを「写真」に例えるなら、PLは何に例えられる？</div>
+            <div class="quiz-options" id="quiz5">
+                <div class="quiz-option" onclick="checkAnswer('quiz5', this, false)">A. 地図</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz5', this, true)">B. 動画（ビデオ）</div>
+                <div class="quiz-option" onclick="checkAnswer('quiz5', this, false)">C. カレンダー</div>
+            </div>
+            <div class="quiz-answer" id="quiz5-answer">
+                ✅ <strong>正解は B</strong>！ BSが「ある瞬間の写真」なら、PLは「一定期間のお金の動画」。期間の流れを記録します。
+            </div>
+        </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- ========================================
+         まとめ
+         ======================================== -->
+    <section id="summary">
+        <h2 class="section-title"><span class="icon">🎓</span> まとめ</h2>
+
+        <div class="card">
+            <h3>3つのステップで財務を改善しよう</h3>
+        </div>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-icon">📊</div>
+                <div class="step-title">PL を改善する</div>
+                <div class="step-desc">収入を増やすか<br>支出を減らして<br>毎月黒字をめざす</div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-icon">🏦</div>
+                <div class="step-title">BS が良くなる</div>
+                <div class="step-desc">黒字の分だけ<br>資産が増え<br>純資産が改善する</div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-icon">🎯</div>
+                <div class="step-title">借金完済へ</div>
+                <div class="step-desc">負債が減り<br>純資産がプラスに<br>なることが目標</div>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="sc-icon">📸</div>
+                <div class="sc-title">BS（バランスシート）</div>
+                <div class="sc-desc">
+                    ある時点の財産の写真<br>
+                    <strong>資産 ＝ 負債 ＋ 純資産</strong><br>
+                    「今いくら持ってる？借りてる？」
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-icon">🎬</div>
+                <div class="sc-title">PL（損益計算書）</div>
+                <div class="sc-desc">
+                    一定期間のお金の動画<br>
+                    <strong>収入 − 支出 ＝ 収支</strong><br>
+                    「稼いだ？使いすぎた？」
+                </div>
+            </div>
+        </div>
+
+        <div class="card highlight">
+            <h3>🌟 最も大切なこと</h3>
+            <p><strong>PLで毎月黒字を出す</strong> → <strong>BSの純資産が増える</strong> → <strong>財務が健全になる</strong></p>
+            <p>この好循環をつくることが、お金の管理の基本です。<br>
+            難しく考えなくて大丈夫。<strong>「入ってくるお金 ＞ 出ていくお金」</strong>をキープするだけ！</p>
+        </div>
+    </section>
+
+    <div class="footer">
+        <p>PL・BS 図解ガイド ｜ 家計管理アプリ 付属資料</p>
+    </div>
+
+</div>
+
+<script>
+    function checkAnswer(quizId, el, isCorrect) {
+        const container = document.getElementById(quizId);
+        const options = container.querySelectorAll('.quiz-option');
+        // すでに回答済みなら無視
+        if (container.dataset.answered) return;
+        container.dataset.answered = 'true';
+
+        options.forEach(opt => {
+            opt.style.cursor = 'default';
+        });
+
+        if (isCorrect) {
+            el.classList.add('correct');
+        } else {
+            el.classList.add('wrong');
+            // 正解を表示
+            options.forEach(opt => {
+                if (opt.onclick && opt.onclick.toString().includes('true')) {
+                    opt.classList.add('correct');
+                }
+            });
+        }
+
+        // 解説を表示
+        document.getElementById(quizId + '-answer').classList.add('show');
+    }
+
+    // スムーススクロール
+    document.querySelectorAll('.toc a').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+</script>
+
+</body>
+</html>
