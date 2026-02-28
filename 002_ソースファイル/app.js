@@ -6,6 +6,7 @@ class FinanceApp {
         this.monthlyRecords = [];
         this.loanOriginalBalance = null;
         this.loanInterestRate = 8.0;
+        this.loanMonthlyRepayment = null;
         this.directoryHandle = null;
         this.charts = {};
         // 新機能用プロパティ
@@ -227,6 +228,7 @@ class FinanceApp {
         if (data.monthlyRecords) this.monthlyRecords = data.monthlyRecords;
         if (data.loanOriginalBalance !== undefined) this.loanOriginalBalance = data.loanOriginalBalance;
         if (data.loanInterestRate !== undefined) this.loanInterestRate = data.loanInterestRate;
+        if (data.loanMonthlyRepayment !== undefined) this.loanMonthlyRepayment = data.loanMonthlyRepayment;
         if (data.budgets) this.budgets = data.budgets;
         if (data.goals) this.goals = data.goals;
         this.isDirty = false;
@@ -239,6 +241,7 @@ class FinanceApp {
             plCategories: this.plCategories,
             loanOriginalBalance: this.loanOriginalBalance,
             loanInterestRate: this.loanInterestRate,
+            loanMonthlyRepayment: this.loanMonthlyRepayment,
             monthlyRecords: this.monthlyRecords,
             budgets: this.budgets,
             goals: this.goals
@@ -676,10 +679,10 @@ class FinanceApp {
 
         document.getElementById('loan-remaining').textContent = `残高: ${this.formatCurrency(currentBalance)}`;
 
-        // 完済予測
+        // 完済予測（実績 → 設定値 の優先順）
         const monthlyInterest = Math.round(currentBalance * (this.loanInterestRate / 100) / 12);
         const sortedRecords = this.getSortedRecords();
-        let monthlyRepayment = monthlyInterest; // デフォルト
+        let monthlyRepayment = 0;
         if (sortedRecords.length >= 2) {
             const last = sortedRecords[sortedRecords.length - 1];
             const prev = sortedRecords[sortedRecords.length - 2];
@@ -687,13 +690,18 @@ class FinanceApp {
             const prevBal = prev.bs[loanAcc.id] || 0;
             if (prevBal > lastBal) monthlyRepayment = prevBal - lastBal;
         }
+        if (monthlyRepayment === 0 && this.loanMonthlyRepayment && this.loanMonthlyRepayment > 0) {
+            monthlyRepayment = this.loanMonthlyRepayment;
+        }
 
         if (monthlyRepayment > monthlyInterest) {
             const principalPay = monthlyRepayment - monthlyInterest;
             const monthsLeft = Math.ceil(currentBalance / principalPay);
             document.getElementById('loan-estimate').textContent = `完済まで約${monthsLeft}ヶ月（${Math.ceil(monthsLeft / 12)}年）`;
         } else {
-            document.getElementById('loan-estimate').textContent = '返済ペースが利息以下です';
+            document.getElementById('loan-estimate').textContent = monthlyRepayment === 0
+                ? '⚙️ 設定タブで月々の返済額を入力してください'
+                : '返済ペースが利息以下です';
         }
 
         const fillEl = document.getElementById('loan-progress-fill');
@@ -1812,6 +1820,8 @@ class FinanceApp {
         const loanOrigInput = document.getElementById('loan-original');
         if (this.loanOriginalBalance) loanOrigInput.value = this.loanOriginalBalance;
         document.getElementById('loan-rate').value = this.loanInterestRate;
+        const loanRepayInput = document.getElementById('loan-monthly-repayment');
+        if (loanRepayInput && this.loanMonthlyRepayment) loanRepayInput.value = this.loanMonthlyRepayment;
 
         // 口座リスト
         const accountList = document.getElementById('account-list');
@@ -1868,10 +1878,14 @@ class FinanceApp {
     saveLoanSettings() {
         const original = parseInt(document.getElementById('loan-original').value);
         const rate = parseFloat(document.getElementById('loan-rate').value);
+        const repayment = parseInt(document.getElementById('loan-monthly-repayment').value);
 
         if (original && original > 0) this.loanOriginalBalance = original;
         if (rate && rate > 0) this.loanInterestRate = rate;
+        this.loanMonthlyRepayment = (repayment && repayment > 0) ? repayment : null;
 
+        this.isDirty = true;
+        this.updateSaveStatus();
         this.showStatus('success', '✅', 'ローン設定を保存しました。');
         this.renderDashboard();
     }
@@ -2197,15 +2211,24 @@ class FinanceApp {
         const original = this.loanOriginalBalance || balance;
         const paidOff = original - balance;
 
-        // 月々の返済額を推定
+        // 月々の返済額を推定（実績 → 設定値 の優先順）
         const sortedRecords = this.getSortedRecords();
         let monthlyRepayment = 0;
+        let repaymentSource = '';
         if (sortedRecords.length >= 2) {
             const last = sortedRecords[sortedRecords.length - 1];
             const prev = sortedRecords[sortedRecords.length - 2];
             const lastBal = last.bs[loanAcc.id] || 0;
             const prevBal = prev.bs[loanAcc.id] || 0;
-            if (prevBal > lastBal) monthlyRepayment = prevBal - lastBal;
+            if (prevBal > lastBal) {
+                monthlyRepayment = prevBal - lastBal;
+                repaymentSource = '実績値';
+            }
+        }
+        // 実績が取れなければ設定値にフォールバック
+        if (monthlyRepayment === 0 && this.loanMonthlyRepayment && this.loanMonthlyRepayment > 0) {
+            monthlyRepayment = this.loanMonthlyRepayment;
+            repaymentSource = '設定値';
         }
 
         const principalPay = monthlyRepayment - monthlyInterest;
@@ -2218,9 +2241,11 @@ class FinanceApp {
             targetDate = `${target.getFullYear()}年${target.getMonth() + 1}月`;
         }
 
+        const noData = monthsLeft === 0;
+        const sourceLabel = repaymentSource ? `（${repaymentSource}ベース）` : '';
         container.innerHTML = `
-            <div class="countdown-main">${monthsLeft > 0 ? `あと約 ${monthsLeft}ヶ月` : '返済ペース算出中...'}</div>
-            <div class="countdown-sub">${targetDate ? `完済予定: ${targetDate}` : '返済データが不足しています'}</div>
+            <div class="countdown-main">${noData ? '⚙️ 設定タブで月々の返済額を入力してください' : `あと約 ${monthsLeft}ヶ月 ${sourceLabel}`}</div>
+            <div class="countdown-sub">${targetDate ? `完済予定: ${targetDate}` : (noData ? '返済額の設定で完済予測を表示できます' : '')}</div>
             <div class="countdown-progress">
                 <div class="countdown-stat">
                     <div class="countdown-stat-value">${this.formatCurrency(paidOff)}</div>
