@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>家計管理アプリ</title>
+    <link rel="stylesheet" href="002_ソースファイル/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>💰 家計管理アプリ</h1>
+        <div class="app-notice">
+            <p>📌 一人法人分と個人での利用を合算して管理しています。</p>
+        </div>
+
+        <!-- データ読み込み状況 -->
+        <div id="data-status" class="data-status"></div>
+
+        <!-- ファイル操作ボタン -->
+        <div class="file-operations">
+            <button id="save-data" class="btn btn-primary">💾 データを保存</button>
+            <button id="load-data" class="btn btn-primary">🔄 最新データを読み込み</button>
+            <button id="export-csv" class="btn btn-secondary">📤 CSVエクスポート</button>
+        </div>
+
+        <!-- 最終保存日時 -->
+        <div class="header-info">
+            <span id="last-save-time" class="last-save-time">未保存</span>
+            <span id="dirty-indicator" class="dirty-indicator" style="display:none">● 未保存の変更あり</span>
+        </div>
+
+        <!-- タブナビゲーション -->
+        <div class="tabs">
+            <button class="tab-button active" data-tab="dashboard">📊 ダッシュボード</button>
+            <button class="tab-button" data-tab="pl-detail">💰 PL詳細</button>
+            <button class="tab-button" data-tab="bs-detail">🏦 BS詳細</button>
+            <button class="tab-button" data-tab="input">✏️ 月次入力</button>
+            <button class="tab-button" data-tab="charts">📈 推移グラフ</button>
+            <button class="tab-button" data-tab="yearly">📅 年間</button>
+            <button class="tab-button" data-tab="settings">⚙️ 設定</button>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- ダッシュボードタブ -->
+        <!-- ============================================ -->
+        <div id="dashboard-tab" class="tab-content active">
+            <!-- 月選択 -->
+            <div class="dashboard-month-selector">
+                <button class="month-nav" id="dashboard-prev" title="前月">◀</button>
+                <label for="dashboard-year">表示月:</label>
+                <select id="dashboard-year"></select>
+                <select id="dashboard-month"></select>
+                <button class="month-nav" id="dashboard-next" title="翌月">▶</button>
+            </div>
+
+            <!-- 健康度ゲージ -->
+            <div class="gauge-section">
+                <h2>財務の健康度</h2>
+                <div class="gauge-container">
+                    <canvas id="health-gauge"></canvas>
+                    <div class="gauge-center">
+                        <span class="gauge-score" id="gauge-score">--</span>
+                        <span class="gauge-label" id="gauge-label">データなし</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- サマリーカード -->
+            <div class="summary-cards" id="summary-cards">
+                <div class="summary-card neutral">
+                    <div class="card-header"><span class="card-icon">📊</span> 純資産 <span class="pct-badge" id="badge-net-worth"></span></div>
+                    <div class="card-amount" id="card-net-worth">--</div>
+                    <div class="card-delta" id="card-net-worth-delta"></div>
+                    <div class="sparkline-container" id="sparkline-net-worth"></div>
+                </div>
+                <div class="summary-card positive">
+                    <div class="card-header"><span class="card-icon">💰</span> 総資産 <span class="pct-badge" id="badge-total-assets"></span></div>
+                    <div class="card-amount" id="card-total-assets">--</div>
+                    <div class="card-delta" id="card-total-assets-delta"></div>
+                    <div class="sparkline-container" id="sparkline-total-assets"></div>
+                </div>
+                <div class="summary-card negative">
+                    <div class="card-header"><span class="card-icon">💳</span> 総負債 <span class="pct-badge" id="badge-total-liabilities"></span></div>
+                    <div class="card-amount" id="card-total-liabilities">--</div>
+                    <div class="card-delta" id="card-total-liabilities-delta"></div>
+                    <div class="card-sub" id="card-interest-info"></div>
+                    <div class="sparkline-container" id="sparkline-total-liabilities"></div>
+                </div>
+                <div class="summary-card neutral">
+                    <div class="card-header"><span class="card-icon">📊</span> 月間収支 <span class="pct-badge" id="badge-monthly-flow"></span></div>
+                    <div class="card-amount" id="card-monthly-flow">--</div>
+                    <div class="card-delta" id="card-monthly-flow-delta"></div>
+                    <div class="sparkline-container" id="sparkline-monthly-flow"></div>
+                </div>
+            </div>
+
+            <!-- ローン返済プログレス -->
+            <div class="loan-section">
+                <h3>🏦 ローン返済進捗</h3>
+                <div class="loan-info">
+                    <span id="loan-remaining">--</span>
+                    <span id="loan-estimate"></span>
+                </div>
+                <div class="loan-progress">
+                    <div class="loan-progress-fill" id="loan-progress-fill" style="width: 0%">
+                        <span id="loan-progress-text">0%</span>
+                    </div>
+                </div>
+                <div class="loan-details" id="loan-details"></div>
+                <!-- ローン完済カウントダウン -->
+                <div class="loan-countdown" id="loan-countdown"></div>
+            </div>
+
+            <!-- 信号機インジケーター -->
+            <div class="traffic-lights">
+                <div class="traffic-light">
+                    <div class="traffic-dot" id="light-trend"></div>
+                    <div class="traffic-label">純資産<br>トレンド</div>
+                </div>
+                <div class="traffic-light">
+                    <div class="traffic-dot" id="light-ratio"></div>
+                    <div class="traffic-label">負債<br>比率</div>
+                </div>
+                <div class="traffic-light">
+                    <div class="traffic-dot" id="light-flow"></div>
+                    <div class="traffic-label">月次<br>収支</div>
+                </div>
+            </div>
+
+            <!-- 予算進捗 -->
+            <div class="dashboard-section" id="budget-section">
+                <h3>💰 予算進捗</h3>
+                <div id="budget-progress"></div>
+            </div>
+
+            <!-- 目標進捗 -->
+            <div class="dashboard-section" id="goal-section">
+                <h3>🎯 目標進捗</h3>
+                <div id="goal-progress"></div>
+            </div>
+
+            <!-- 資産内訳ドーナツ -->
+            <div class="chart-row">
+                <div class="chart-half">
+                    <h3>🏦 資産の内訳</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="asset-breakdown-chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-half">
+                    <h3>💸 支出の内訳</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="expense-breakdown-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自動コメント -->
+            <div class="commentary-card" id="commentary-card">
+                <h3>📝 今月のコメント</h3>
+                <div id="commentary-content">
+                    <p class="commentary-empty">データがありません</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- BS詳細タブ -->
+        <!-- ============================================ -->
+        <div id="bs-detail-tab" class="tab-content">
+            <!-- 月選択 -->
+            <div class="detail-month-selector">
+                <button class="month-nav" id="bs-prev" title="前月">◀</button>
+                <label for="bs-detail-year">表示月:</label>
+                <select id="bs-detail-year"></select>
+                <select id="bs-detail-month"></select>
+                <button class="month-nav" id="bs-next" title="翌月">▶</button>
+            </div>
+
+            <h2>🏦 貸借対照表（BS）詳細</h2>
+
+            <!-- BS サマリーカード -->
+            <div class="detail-summary">
+                <div class="detail-summary-item positive">
+                    <div class="detail-summary-label">💰 総資産</div>
+                    <div class="detail-summary-value" id="bs-total-assets">--</div>
+                </div>
+                <div class="detail-summary-item negative">
+                    <div class="detail-summary-label">💳 総負債</div>
+                    <div class="detail-summary-value" id="bs-total-liabilities">--</div>
+                </div>
+                <div class="detail-summary-item" id="bs-net-worth-card">
+                    <div class="detail-summary-label">📊 純資産</div>
+                    <div class="detail-summary-value" id="bs-net-worth">--</div>
+                </div>
+            </div>
+
+            <!-- 資産テーブル -->
+            <div class="detail-section">
+                <h3>💰 資産の部</h3>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>勘定科目</th>
+                            <th class="col-amount">残高</th>
+                            <th class="col-ratio">構成比</th>
+                            <th class="col-delta">前月比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bs-asset-tbody"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td><strong>資産合計</strong></td>
+                            <td class="col-amount" id="bs-asset-total-cell">--</td>
+                            <td class="col-ratio">100%</td>
+                            <td class="col-delta" id="bs-asset-delta-cell">--</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 負債テーブル -->
+            <div class="detail-section">
+                <h3>💳 負債の部</h3>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>勘定科目</th>
+                            <th class="col-amount">残高</th>
+                            <th class="col-ratio">構成比</th>
+                            <th class="col-delta">前月比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bs-liability-tbody"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td><strong>負債合計</strong></td>
+                            <td class="col-amount" id="bs-liability-total-cell">--</td>
+                            <td class="col-ratio">100%</td>
+                            <td class="col-delta" id="bs-liability-delta-cell">--</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- BS チャート -->
+            <div class="chart-row">
+                <div class="chart-half">
+                    <h3>資産構成</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="bs-asset-pie"></canvas>
+                    </div>
+                </div>
+                <div class="chart-half">
+                    <h3>資産 vs 負債</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="bs-bar-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BS コメント -->
+            <div class="commentary-card">
+                <h3>📝 BSコメント</h3>
+                <div id="bs-commentary-content">
+                    <p class="commentary-empty">データがありません</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PL詳細タブ -->
+        <!-- ============================================ -->
+        <div id="pl-detail-tab" class="tab-content">
+            <!-- 月選択 -->
+            <div class="detail-month-selector">
+                <button class="month-nav" id="pl-prev" title="前月">◀</button>
+                <label for="pl-detail-year">表示月:</label>
+                <select id="pl-detail-year"></select>
+                <select id="pl-detail-month"></select>
+                <button class="month-nav" id="pl-next" title="翌月">▶</button>
+            </div>
+
+            <h2>💰 損益計算書（PL）詳細</h2>
+
+            <!-- PL サマリーカード -->
+            <div class="detail-summary">
+                <div class="detail-summary-item positive">
+                    <div class="detail-summary-label">💼 収入合計</div>
+                    <div class="detail-summary-value" id="pl-total-income">--</div>
+                </div>
+                <div class="detail-summary-item negative">
+                    <div class="detail-summary-label">💸 支出合計</div>
+                    <div class="detail-summary-value" id="pl-total-expenses">--</div>
+                </div>
+                <div class="detail-summary-item" id="pl-flow-card">
+                    <div class="detail-summary-label">📊 月次損益</div>
+                    <div class="detail-summary-value" id="pl-monthly-flow">--</div>
+                </div>
+            </div>
+
+            <!-- 収入テーブル -->
+            <div class="detail-section">
+                <h3>💼 収入の部</h3>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th class="col-amount">金額</th>
+                            <th class="col-delta">前月比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pl-income-tbody"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td><strong>収入合計</strong></td>
+                            <td class="col-amount" id="pl-income-total-cell">--</td>
+                            <td class="col-delta" id="pl-income-delta-cell">--</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 支出テーブル -->
+            <div class="detail-section">
+                <h3>💸 支出の部</h3>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th class="col-amount">金額</th>
+                            <th class="col-ratio">構成比</th>
+                            <th class="col-delta">前月比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pl-expense-tbody"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td><strong>支出合計</strong></td>
+                            <td class="col-amount" id="pl-expense-total-cell">--</td>
+                            <td class="col-ratio">100%</td>
+                            <td class="col-delta" id="pl-expense-delta-cell">--</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 参考項目 -->
+            <div class="detail-section reference-section" id="pl-reference-section">
+                <h3>🏢 参考項目</h3>
+                <p class="section-note">※ 損益計算には含まれません</p>
+                <table class="detail-table">
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th class="col-amount">金額</th>
+                            <th class="col-delta">前月比</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pl-reference-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- 損益サマリーバー -->
+            <div class="pl-waterfall-section">
+                <h3>📊 収支バランス</h3>
+                <div class="chart-wrapper-small">
+                    <canvas id="pl-waterfall-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- PL チャート -->
+            <div class="chart-row">
+                <div class="chart-half">
+                    <h3>支出内訳</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="pl-expense-pie"></canvas>
+                    </div>
+                </div>
+                <div class="chart-half">
+                    <h3>収入 vs 支出</h3>
+                    <div class="chart-wrapper-small">
+                        <canvas id="pl-income-expense-bar"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PL コメント -->
+            <div class="commentary-card">
+                <h3>📝 PLコメント</h3>
+                <div id="pl-commentary-content">
+                    <p class="commentary-empty">データがありません</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 月次入力タブ -->
+        <!-- ============================================ -->
+        <div id="input-tab" class="tab-content">
+            <h2>月次データ入力</h2>
+
+            <!-- 年月選択 -->
+            <div class="input-month-selector">
+                <button class="month-nav" id="input-prev" title="前月">◀</button>
+                <div class="form-group">
+                    <label for="input-year">年</label>
+                    <select id="input-year"></select>
+                </div>
+                <div class="form-group">
+                    <label for="input-month">月</label>
+                    <select id="input-month"></select>
+                </div>
+                <button class="month-nav" id="input-next" title="翌月">▶</button>
+                <button id="copy-previous" class="btn btn-secondary">📋 前月コピー</button>
+            </div>
+
+            <!-- 既存データ表示 -->
+            <div id="input-existing-data" class="input-existing-notice" style="display: none;">
+                <span>⚠️ この月のデータは既に登録されています。保存すると上書きされます。</span>
+            </div>
+
+            <!-- BS: 資産 -->
+            <div class="input-section">
+                <h3>🏦 資産（預金残高）</h3>
+                <div id="asset-inputs"></div>
+                <div class="input-subtotal">
+                    <span>資産合計</span>
+                    <span class="subtotal-value" id="input-total-assets">¥0</span>
+                </div>
+            </div>
+
+            <!-- BS: 負債 -->
+            <div class="input-section">
+                <h3>💳 負債</h3>
+                <div id="liability-inputs"></div>
+                <div class="input-subtotal">
+                    <span>負債合計</span>
+                    <span class="subtotal-value negative" id="input-total-liabilities">¥0</span>
+                </div>
+            </div>
+
+            <!-- 純資産 -->
+            <div class="input-net-worth">
+                <span>📊 純資産（資産 − 負債）</span>
+                <span class="net-worth-value" id="input-net-worth">¥0</span>
+            </div>
+
+            <!-- PL: 収入 -->
+            <div class="input-section">
+                <h3>💼 収入</h3>
+                <div id="income-inputs"></div>
+                <div class="input-subtotal">
+                    <span>収入合計</span>
+                    <span class="subtotal-value positive" id="input-total-income">¥0</span>
+                </div>
+            </div>
+
+            <!-- PL: 支出 -->
+            <div class="input-section">
+                <h3>🏠 支出</h3>
+                <div id="expense-inputs"></div>
+                <div class="input-subtotal">
+                    <span>支出合計</span>
+                    <span class="subtotal-value negative" id="input-total-expenses">¥0</span>
+                </div>
+            </div>
+
+            <!-- 月次損益 -->
+            <div class="input-net-worth">
+                <span>📊 月次損益（収入 − 支出）</span>
+                <span class="net-worth-value" id="input-monthly-flow">¥0</span>
+            </div>
+
+            <!-- 参考項目 -->
+            <div class="input-section reference-section" id="input-reference-section">
+                <h3>🏢 参考項目</h3>
+                <p class="section-note">※ PLには含まれません。参考表示です。</p>
+                <div id="reference-inputs"></div>
+            </div>
+
+            <!-- メモ -->
+            <div class="input-section">
+                <h3>📝 メモ</h3>
+                <textarea id="input-memo" class="memo-textarea" placeholder="今月の特記事項があれば記入..."></textarea>
+            </div>
+
+            <!-- 保存ボタン -->
+            <button id="save-monthly" class="btn btn-primary btn-large">💾 この月のデータを保存</button>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 推移グラフタブ -->
+        <!-- ============================================ -->
+        <div id="charts-tab" class="tab-content">
+            <h2>推移グラフ</h2>
+
+            <!-- フィルター -->
+            <div class="filter-section">
+                <label for="chart-range">表示範囲:</label>
+                <select id="chart-range">
+                    <option value="6">直近6ヶ月</option>
+                    <option value="12" selected>直近12ヶ月</option>
+                    <option value="24">直近24ヶ月</option>
+                    <option value="0">全期間</option>
+                </select>
+            </div>
+
+            <!-- 純資産推移 -->
+            <div class="chart-section">
+                <h3>📊 純資産の推移</h3>
+                <div class="chart-wrapper">
+                    <canvas id="net-worth-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- 資産vs負債 -->
+            <div class="chart-section">
+                <h3>🏦 資産 vs 負債</h3>
+                <div class="chart-wrapper">
+                    <canvas id="assets-liabilities-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- 月次収支 -->
+            <div class="chart-section">
+                <h3>💰 月次収支</h3>
+                <div class="chart-wrapper">
+                    <canvas id="cash-flow-chart"></canvas>
+                </div>
+            </div>
+
+            <!-- ローン残高推移 -->
+            <div class="chart-section">
+                <h3>💳 ローン残高の推移</h3>
+                <div class="chart-wrapper">
+                    <canvas id="loan-trend-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 年間サマリータブ -->
+        <!-- ============================================ -->
+        <div id="yearly-tab" class="tab-content">
+            <h2>📅 年間サマリー</h2>
+
+            <!-- 年選択 -->
+            <div class="filter-section">
+                <label for="yearly-year">年:</label>
+                <select id="yearly-year"></select>
+            </div>
+
+            <!-- ヒートマップカレンダー -->
+            <div class="yearly-section">
+                <h3>📊 月別収支ヒートマップ</h3>
+                <div id="heatmap-calendar"></div>
+            </div>
+
+            <!-- 年間推移テーブル -->
+            <div class="yearly-section">
+                <h3>📋 月別データ一覧</h3>
+                <div class="yearly-table-wrapper">
+                    <table class="yearly-table" id="yearly-table">
+                        <thead>
+                            <tr>
+                                <th>月</th>
+                                <th>総資産</th>
+                                <th>総負債</th>
+                                <th>純資産</th>
+                                <th>収入</th>
+                                <th>支出</th>
+                                <th>損益</th>
+                            </tr>
+                        </thead>
+                        <tbody id="yearly-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 2ヶ月比較 -->
+            <div class="yearly-section">
+                <h3>🔄 2ヶ月比較</h3>
+                <div class="comparison-selectors">
+                    <div class="form-group">
+                        <label for="compare-month1">比較元:</label>
+                        <select id="compare-month1"></select>
+                    </div>
+                    <span class="comparison-vs">vs</span>
+                    <div class="form-group">
+                        <label for="compare-month2">比較先:</label>
+                        <select id="compare-month2"></select>
+                    </div>
+                    <button id="compare-btn" class="btn btn-primary">比較する</button>
+                </div>
+                <div id="comparison-result"></div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- 設定タブ -->
+        <!-- ============================================ -->
+        <div id="settings-tab" class="tab-content">
+            <h2>設定</h2>
+
+            <!-- ローン初期残高 -->
+            <div class="settings-section">
+                <h3>🏦 ローン設定</h3>
+                <div class="form-group">
+                    <label for="loan-original">借入時の元本（ローン初期残高）</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="loan-original" placeholder="例: 5000000">
+                        <span class="unit">円</span>
+                    </div>
+                    <small>設定すると返済プログレスバーに反映されます</small>
+                </div>
+                <div class="form-group">
+                    <label for="loan-rate">年利（%）</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="loan-rate" step="0.1" value="8.0">
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+                <button id="save-loan-settings" class="btn btn-primary">💾 ローン設定を保存</button>
+            </div>
+
+            <!-- 予算設定 -->
+            <div class="settings-section">
+                <h3>💰 予算設定</h3>
+                <p class="section-note">支出カテゴリごとに月間予算を設定します。ダッシュボードに進捗が表示されます。</p>
+                <div id="budget-settings-list"></div>
+                <button id="save-budget-settings" class="btn btn-primary">💾 予算を保存</button>
+            </div>
+
+            <!-- 目標設定 -->
+            <div class="settings-section">
+                <h3>🎯 目標設定</h3>
+                <div id="goal-list"></div>
+                <div class="add-goal-form">
+                    <h4>目標を追加</h4>
+                    <div class="form-group">
+                        <label for="new-goal-name">目標名</label>
+                        <input type="text" id="new-goal-name" placeholder="例: ローン完済">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-goal-type">種類</label>
+                        <select id="new-goal-type">
+                            <option value="loan_payoff">ローン完済</option>
+                            <option value="savings">貯蓄目標</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-goal-target">目標金額</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="new-goal-target" placeholder="例: 1000000">
+                            <span class="unit">円</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-goal-date">目標月</label>
+                        <input type="month" id="new-goal-date">
+                    </div>
+                    <button id="add-goal" class="btn btn-primary">➕ 追加</button>
+                </div>
+            </div>
+
+            <!-- 口座管理 -->
+            <div class="settings-section">
+                <h3>🏦 口座管理</h3>
+                <div id="account-list"></div>
+                <div class="add-account-form">
+                    <h4>口座を追加</h4>
+                    <div class="form-group">
+                        <label for="new-account-name">口座名</label>
+                        <input type="text" id="new-account-name" placeholder="例: PayPay銀行">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-account-type">種別</label>
+                        <select id="new-account-type">
+                            <option value="asset">資産（預金）</option>
+                            <option value="liability">負債（ローン・未払）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-account-icon">アイコン</label>
+                        <select id="new-account-icon">
+                            <option value="🏦">🏦 銀行</option>
+                            <option value="🏢">🏢 法人</option>
+                            <option value="💳">💳 クレジット</option>
+                            <option value="💰">💰 貯蓄</option>
+                            <option value="🏠">🏠 住宅</option>
+                        </select>
+                    </div>
+                    <button id="add-account" class="btn btn-primary">➕ 追加</button>
+                </div>
+            </div>
+
+            <!-- PL カテゴリ管理 -->
+            <div class="settings-section">
+                <h3>💰 収支カテゴリ管理</h3>
+                <div id="category-list"></div>
+                <div class="add-category-form">
+                    <h4>カテゴリを追加</h4>
+                    <div class="form-group">
+                        <label for="new-category-name">カテゴリ名</label>
+                        <input type="text" id="new-category-name" placeholder="例: 副業収入">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-category-type">種別</label>
+                        <select id="new-category-type">
+                            <option value="income">収入</option>
+                            <option value="expense">支出</option>
+                            <option value="reference">参考（PL対象外）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-category-icon">アイコン</label>
+                        <select id="new-category-icon">
+                            <option value="💼">💼 給与</option>
+                            <option value="💰">💰 収入</option>
+                            <option value="🏠">🏠 住居</option>
+                            <option value="💳">💳 カード</option>
+                            <option value="🏢">🏢 法人</option>
+                            <option value="🚗">🚗 交通</option>
+                            <option value="🍽️">🍽️ 食費</option>
+                            <option value="📱">📱 通信</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-category-desc">説明（任意）</label>
+                        <input type="text" id="new-category-desc" placeholder="例: 家賃+光熱費+通信費">
+                    </div>
+                    <button id="add-category" class="btn btn-primary">➕ 追加</button>
+                </div>
+            </div>
+
+            <!-- データ管理 -->
+            <div class="settings-section">
+                <h3>📁 データ管理</h3>
+                <p>データは <code>001_データ</code> フォルダにJSON形式で保存されます。</p>
+                <p>ファイル名: <code>finance_YYYYMMDD_HHMMSS.json</code></p>
+                <div class="data-stats" id="data-stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="002_ソースファイル/app.js"></script>
+</body>
+</html>

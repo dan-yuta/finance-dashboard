@@ -1,0 +1,1862 @@
+/* ======================================
+   基本リセット・ベーススタイル
+   ====================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 2em;
+}
+
+.app-notice {
+    text-align: center;
+    background: #f0f4ff;
+    border: 1px solid #d0d8f0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 0.9em;
+}
+
+h2 {
+    color: #555;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+h3 {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+h4 {
+    color: #777;
+    margin-bottom: 10px;
+    font-size: 1.05em;
+}
+
+/* ======================================
+   データ読み込み状況
+   ====================================== */
+.data-status {
+    margin-bottom: 15px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+.data-status.success {
+    display: flex;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.data-status.info {
+    display: flex;
+    background-color: #d1ecf1;
+    border: 1px solid #bee5eb;
+    color: #0c5460;
+}
+
+.data-status.warning {
+    display: flex;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+}
+
+.data-status.error {
+    display: flex;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.data-status-icon {
+    font-size: 1.2em;
+}
+
+/* ======================================
+   ファイル操作ボタン
+   ====================================== */
+.file-operations {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+/* ======================================
+   ボタン
+   ====================================== */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+}
+
+.btn-small {
+    padding: 5px 12px;
+    font-size: 0.85em;
+}
+
+.btn-large {
+    padding: 15px 30px;
+    font-size: 1.1em;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* ======================================
+   タブナビゲーション
+   ====================================== */
+.tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #888;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: #555;
+    background-color: #f5f5f5;
+}
+
+.tab-button.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ======================================
+   フォーム共通
+   ====================================== */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: 500;
+}
+
+.form-group select,
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    transition: border-color 0.3s;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 4px;
+    color: #999;
+    font-size: 0.85em;
+}
+
+/* ======================================
+   フィルターセクション
+   ====================================== */
+.filter-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-section label {
+    color: #555;
+    font-weight: 500;
+}
+
+.filter-section select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.95em;
+    font-family: inherit;
+}
+
+/* ======================================
+   ダッシュボード - 月選択
+   ====================================== */
+.dashboard-month-selector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.dashboard-month-selector label {
+    font-weight: 600;
+    color: #555;
+}
+
+.dashboard-month-selector select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+/* ======================================
+   ダッシュボード - 健康度ゲージ
+   ====================================== */
+.gauge-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.gauge-section h2 {
+    margin-bottom: 10px;
+}
+
+.gauge-container {
+    width: 280px;
+    height: 180px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.gauge-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.gauge-center {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.gauge-score {
+    display: block;
+    font-size: 2.8em;
+    font-weight: 800;
+    line-height: 1;
+    color: #333;
+}
+
+.gauge-label {
+    display: block;
+    font-size: 1em;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* ======================================
+   ダッシュボード - サマリーカード
+   ====================================== */
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.summary-card {
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 5px solid #667eea;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.summary-card.positive {
+    border-left-color: #10b981;
+}
+
+.summary-card.negative {
+    border-left-color: #ef4444;
+}
+
+.summary-card.neutral {
+    border-left-color: #667eea;
+}
+
+.card-header {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.card-icon {
+    font-size: 1.2em;
+    margin-right: 4px;
+}
+
+.card-amount {
+    font-size: 1.8em;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.2;
+}
+
+.card-amount.text-positive { color: #10b981; }
+.card-amount.text-negative { color: #ef4444; }
+
+.card-delta {
+    font-size: 0.85em;
+    margin-top: 6px;
+    min-height: 1.2em;
+}
+
+.card-delta.up { color: #10b981; }
+.card-delta.down { color: #ef4444; }
+.card-delta.flat { color: #9ca3af; }
+
+.card-sub {
+    font-size: 0.8em;
+    color: #9ca3af;
+    margin-top: 4px;
+}
+
+/* ======================================
+   ダッシュボード - ローンプログレス
+   ====================================== */
+.loan-section {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.loan-section h3 {
+    margin-bottom: 12px;
+}
+
+.loan-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.95em;
+    color: #555;
+}
+
+.loan-progress {
+    background: #e5e7eb;
+    border-radius: 12px;
+    height: 32px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.loan-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    border-radius: 12px;
+    transition: width 0.8s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.85em;
+    min-width: 40px;
+}
+
+.loan-details {
+    font-size: 0.85em;
+    color: #888;
+    text-align: center;
+}
+
+/* ======================================
+   ダッシュボード - 信号機インジケーター
+   ====================================== */
+.traffic-lights {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    margin: 28px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.traffic-light {
+    text-align: center;
+}
+
+.traffic-dot {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+    background: #d1d5db;
+    transition: background 0.5s, box-shadow 0.5s;
+}
+
+.traffic-dot.green {
+    background: #10b981;
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.4);
+}
+
+.traffic-dot.yellow {
+    background: #f59e0b;
+    box-shadow: 0 0 16px rgba(245, 158, 11, 0.4);
+}
+
+.traffic-dot.red {
+    background: #ef4444;
+    box-shadow: 0 0 16px rgba(239, 68, 68, 0.4);
+}
+
+.traffic-label {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.3;
+    font-weight: 500;
+}
+
+/* ======================================
+   ダッシュボード - チャート横並び
+   ====================================== */
+.chart-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+}
+
+.chart-half {
+    text-align: center;
+}
+
+.chart-wrapper-small {
+    max-height: 280px;
+    position: relative;
+}
+
+.chart-wrapper-small canvas {
+    max-height: 280px;
+}
+
+/* ======================================
+   ダッシュボード - 自動コメント
+   ====================================== */
+.commentary-card {
+    background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 8px;
+}
+
+.commentary-card h3 {
+    margin-bottom: 16px;
+    color: #555;
+}
+
+.commentary-item {
+    padding: 10px 0;
+    font-size: 1.05em;
+    color: #444;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    line-height: 1.5;
+}
+
+.commentary-item:last-child {
+    border-bottom: none;
+}
+
+.commentary-empty {
+    color: #aaa;
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+}
+
+/* ======================================
+   月次入力 - 月選択
+   ====================================== */
+.input-month-selector {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    flex-wrap: wrap;
+}
+
+.input-month-selector .form-group {
+    margin-bottom: 0;
+}
+
+.input-month-selector select {
+    min-width: 100px;
+}
+
+.input-existing-notice {
+    padding: 12px 20px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    color: #856404;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+/* ======================================
+   月次入力 - セクション
+   ====================================== */
+.input-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #fafbfc;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.input-section h3 {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+}
+
+.section-note {
+    font-size: 0.85em;
+    color: #999;
+    margin-top: -10px;
+    margin-bottom: 16px;
+}
+
+.reference-section {
+    background: #f5f3ff;
+    border-color: #e0d6ff;
+}
+
+/* ======================================
+   月次入力 - 口座入力行
+   ====================================== */
+.account-input-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: white;
+    border: 1px solid #eee;
+    transition: border-color 0.2s;
+}
+
+.account-input-row:hover {
+    border-color: #667eea;
+}
+
+.account-input-row .row-icon {
+    font-size: 1.4em;
+    flex-shrink: 0;
+}
+
+.account-input-row .row-name {
+    min-width: 150px;
+    font-weight: 500;
+    color: #444;
+    flex-shrink: 0;
+}
+
+.account-input-row .row-desc {
+    font-size: 0.8em;
+    color: #aaa;
+    margin-left: -8px;
+}
+
+.account-input-row input {
+    max-width: 180px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    text-align: right;
+}
+
+.account-input-row input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.account-input-row .row-unit {
+    color: #888;
+    flex-shrink: 0;
+}
+
+.account-input-row .row-prev {
+    font-size: 0.82em;
+    color: #aaa;
+    margin-left: auto;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.row-prev .prev-delta {
+    font-weight: 600;
+}
+
+.row-prev .prev-delta.up { color: #10b981; }
+.row-prev .prev-delta.down { color: #ef4444; }
+
+/* ======================================
+   月次入力 - 小計・純資産
+   ====================================== */
+.input-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-top: 12px;
+    background: #e8eaf6;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #444;
+}
+
+.subtotal-value {
+    font-size: 1.2em;
+}
+
+.subtotal-value.positive { color: #10b981; }
+.subtotal-value.negative { color: #ef4444; }
+
+.input-net-worth {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+.net-worth-value {
+    font-size: 1.4em;
+    font-weight: 700;
+}
+
+/* ======================================
+   月次入力 - メモ
+   ====================================== */
+.memo-textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s;
+}
+
+.memo-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* ======================================
+   推移グラフ
+   ====================================== */
+.chart-section {
+    margin-bottom: 32px;
+}
+
+.chart-section h3 {
+    margin-bottom: 12px;
+}
+
+.chart-wrapper {
+    position: relative;
+    max-height: 400px;
+}
+
+.chart-wrapper canvas {
+    max-height: 400px;
+}
+
+/* ======================================
+   設定
+   ====================================== */
+.settings-section {
+    margin-bottom: 28px;
+    padding: 24px;
+    background: #fafbfc;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.settings-section h3 {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+}
+
+.input-with-unit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.input-with-unit input {
+    flex: 1;
+    max-width: 250px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+.input-with-unit input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.input-with-unit .unit {
+    color: #888;
+    font-size: 1em;
+}
+
+/* 口座/カテゴリリスト */
+.account-list-item,
+.category-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+}
+
+.account-list-item:hover,
+.category-list-item:hover {
+    border-color: #ddd;
+}
+
+.list-item-icon {
+    font-size: 1.3em;
+}
+
+.list-item-name {
+    font-weight: 500;
+    flex: 1;
+}
+
+.list-item-type {
+    font-size: 0.8em;
+    padding: 3px 10px;
+    border-radius: 12px;
+    background: #e8eaf6;
+    color: #667eea;
+}
+
+.list-item-type.liability {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.list-item-type.income {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.list-item-type.expense {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.list-item-type.reference {
+    background: #ede9fe;
+    color: #7c3aed;
+}
+
+.list-item-desc {
+    font-size: 0.82em;
+    color: #aaa;
+}
+
+.add-account-form,
+.add-category-form {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+.data-stats {
+    margin-top: 12px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* ======================================
+   BS・PL詳細タブ - 月選択
+   ====================================== */
+.detail-month-selector {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.detail-month-selector label {
+    font-weight: 600;
+    color: #555;
+}
+
+.detail-month-selector select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+}
+
+/* ======================================
+   BS・PL詳細タブ - サマリー
+   ====================================== */
+.detail-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.detail-summary-item {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    background: #f8f9fa;
+    border: 2px solid #e5e7eb;
+    transition: transform 0.2s;
+}
+
+.detail-summary-item:hover {
+    transform: translateY(-2px);
+}
+
+.detail-summary-item.positive {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.detail-summary-item.negative {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+
+.detail-summary-item.net-positive {
+    background: #ecfdf5;
+    border-color: #10b981;
+}
+
+.detail-summary-item.net-negative {
+    background: #fef2f2;
+    border-color: #ef4444;
+}
+
+.detail-summary-label {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.detail-summary-value {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #333;
+}
+
+.detail-summary-value.text-positive { color: #10b981; }
+.detail-summary-value.text-negative { color: #ef4444; }
+
+/* ======================================
+   BS・PL詳細タブ - セクション
+   ====================================== */
+.detail-section {
+    margin-bottom: 24px;
+    padding: 20px;
+    background: #fafbfc;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.detail-section h3 {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+}
+
+/* ======================================
+   BS・PL詳細タブ - テーブル
+   ====================================== */
+.detail-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+.detail-table th {
+    text-align: left;
+    padding: 10px 14px;
+    background: #f0f2f5;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+}
+
+.detail-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    color: #444;
+}
+
+.detail-table tbody tr:hover {
+    background: #f8f9ff;
+}
+
+.detail-table .col-amount {
+    text-align: right;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 130px;
+}
+
+.detail-table .col-ratio {
+    text-align: center;
+    min-width: 70px;
+    color: #888;
+}
+
+.detail-table .col-delta {
+    text-align: right;
+    min-width: 130px;
+    font-size: 0.9em;
+}
+
+.detail-table .col-delta.up { color: #10b981; }
+.detail-table .col-delta.down { color: #ef4444; }
+.detail-table .col-delta.flat { color: #9ca3af; }
+
+.detail-table .total-row td {
+    border-top: 2px solid #667eea;
+    border-bottom: none;
+    background: #f0f2ff;
+    font-weight: 700;
+}
+
+.detail-table .item-icon {
+    margin-right: 6px;
+}
+
+/* 構成比バー */
+.ratio-bar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ratio-bar {
+    width: 50px;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.ratio-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: #667eea;
+    transition: width 0.5s ease;
+}
+
+/* ======================================
+   PL詳細 - ウォーターフォール
+   ====================================== */
+.pl-waterfall-section {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #fafbfc;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.pl-waterfall-section h3 {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+}
+
+/* ======================================
+   モーダル
+   ====================================== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+/* ======================================
+   レスポンシブ
+   ====================================== */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 16px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .summary-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-row {
+        grid-template-columns: 1fr;
+    }
+
+    .traffic-lights {
+        gap: 20px;
+    }
+
+    .traffic-dot {
+        width: 40px;
+        height: 40px;
+    }
+
+    .account-input-row {
+        flex-wrap: wrap;
+    }
+
+    .account-input-row .row-prev {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 4px;
+    }
+
+    .account-input-row input {
+        max-width: 140px;
+    }
+
+    .input-month-selector {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .card-amount {
+        font-size: 1.4em;
+    }
+
+    .gauge-container {
+        width: 220px;
+        height: 150px;
+    }
+
+    .gauge-score {
+        font-size: 2em;
+    }
+
+    .input-net-worth {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+
+    .detail-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-table .col-ratio {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabs {
+        gap: 2px;
+    }
+
+    .tab-button {
+        padding: 10px 12px;
+        font-size: 0.85em;
+    }
+
+    .file-operations {
+        flex-direction: column;
+    }
+
+    .summary-card {
+        padding: 14px;
+    }
+
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+/* ======================================
+   A1: 月ナビゲーションボタン
+   ====================================== */
+.month-nav {
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.month-nav:hover {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.month-nav:active {
+    transform: scale(0.95);
+}
+
+/* ======================================
+   A5: 最終保存日時・未保存インジケーター
+   ====================================== */
+.header-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 0.85em;
+}
+
+.last-save-time {
+    color: #888;
+}
+
+.dirty-indicator {
+    color: #f59e0b;
+    font-weight: 600;
+    animation: pulse-dirty 2s infinite;
+}
+
+@keyframes pulse-dirty {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ======================================
+   B1: スパークライン
+   ====================================== */
+.sparkline-container {
+    margin-top: 8px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.sparkline-container svg {
+    display: block;
+    width: 100%;
+    height: 32px;
+}
+
+/* ======================================
+   B4: 前月比バッジ
+   ====================================== */
+.pct-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.pct-badge.badge-up {
+    background: #d1fae5;
+    color: #059669;
+}
+
+.pct-badge.badge-down {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.pct-badge.badge-flat {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* ======================================
+   B3: ローン完済カウントダウン
+   ====================================== */
+.loan-countdown {
+    margin-top: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f0f4ff 0%, #faf5ff 100%);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.loan-countdown .countdown-main {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 4px;
+}
+
+.loan-countdown .countdown-sub {
+    font-size: 0.9em;
+    color: #888;
+}
+
+.loan-countdown .countdown-progress {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 12px;
+}
+
+.loan-countdown .countdown-stat {
+    text-align: center;
+}
+
+.loan-countdown .countdown-stat-value {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #444;
+}
+
+.loan-countdown .countdown-stat-label {
+    font-size: 0.8em;
+    color: #999;
+}
+
+/* ======================================
+   C1: 予算進捗・C2: 目標進捗（ダッシュボード）
+   ====================================== */
+.dashboard-section {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.dashboard-section h3 {
+    margin-bottom: 16px;
+}
+
+.budget-progress-item,
+.goal-progress-item {
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+.budget-progress-header,
+.goal-progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+
+.budget-progress-name,
+.goal-progress-name {
+    font-weight: 500;
+    color: #444;
+}
+
+.budget-progress-values,
+.goal-progress-values {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.progress-bar {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.8s ease;
+}
+
+.progress-bar-fill.safe {
+    background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+.progress-bar-fill.warning {
+    background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.progress-bar-fill.danger {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+.progress-bar-fill.goal {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.budget-progress-pct,
+.goal-progress-pct {
+    text-align: right;
+    font-size: 0.82em;
+    color: #888;
+    margin-top: 4px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* ======================================
+   B2+C4: 年間サマリータブ
+   ====================================== */
+.yearly-section {
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #fafbfc;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.yearly-section h3 {
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #eee;
+}
+
+.yearly-table-wrapper {
+    overflow-x: auto;
+}
+
+.yearly-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.yearly-table th {
+    padding: 10px 12px;
+    background: #f0f2f5;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    text-align: right;
+}
+
+.yearly-table th:first-child {
+    text-align: center;
+}
+
+.yearly-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    color: #444;
+    font-variant-numeric: tabular-nums;
+}
+
+.yearly-table td:first-child {
+    text-align: center;
+    font-weight: 500;
+}
+
+.yearly-table tbody tr:hover {
+    background: #f8f9ff;
+}
+
+.yearly-table .no-data {
+    color: #ccc;
+    text-align: center;
+}
+
+.yearly-table .year-total td {
+    border-top: 2px solid #667eea;
+    background: #f0f2ff;
+    font-weight: 700;
+}
+
+/* ======================================
+   B5: ヒートマップカレンダー
+   ====================================== */
+.heatmap-calendar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.heatmap-cell {
+    padding: 16px 12px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.2s;
+    border: 2px solid transparent;
+}
+
+.heatmap-cell:hover {
+    transform: translateY(-2px);
+}
+
+.heatmap-cell .heatmap-month {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+}
+
+.heatmap-cell .heatmap-value {
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.heatmap-cell.heatmap-positive {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+.heatmap-cell.heatmap-positive .heatmap-value { color: #059669; }
+
+.heatmap-cell.heatmap-negative {
+    background: #fef2f2;
+    border-color: #fecaca;
+}
+.heatmap-cell.heatmap-negative .heatmap-value { color: #dc2626; }
+
+.heatmap-cell.heatmap-zero {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+.heatmap-cell.heatmap-zero .heatmap-value { color: #9ca3af; }
+
+.heatmap-cell.heatmap-empty {
+    background: #fafafa;
+    border-color: #f3f4f6;
+}
+.heatmap-cell.heatmap-empty .heatmap-value { color: #d1d5db; }
+
+.heatmap-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 0.82em;
+    color: #888;
+}
+
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.heatmap-legend-color {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+/* ======================================
+   C3: 2ヶ月比較
+   ====================================== */
+.comparison-selectors {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.comparison-selectors .form-group {
+    margin-bottom: 0;
+}
+
+.comparison-selectors select {
+    min-width: 140px;
+}
+
+.comparison-vs {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #667eea;
+    padding-bottom: 8px;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+}
+
+.comparison-table th {
+    padding: 10px 14px;
+    background: #f0f2f5;
+    color: #555;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    text-align: right;
+}
+
+.comparison-table th:first-child {
+    text-align: left;
+}
+
+.comparison-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    color: #444;
+    font-variant-numeric: tabular-nums;
+}
+
+.comparison-table td:first-child {
+    text-align: left;
+    font-weight: 500;
+}
+
+.comparison-table .comp-diff.up { color: #10b981; font-weight: 600; }
+.comparison-table .comp-diff.down { color: #ef4444; font-weight: 600; }
+.comparison-table .comp-diff.flat { color: #9ca3af; }
+
+.comparison-table .section-header td {
+    background: #f8f9fa;
+    font-weight: 700;
+    color: #555;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+/* ======================================
+   A4: 入力バリデーション
+   ====================================== */
+.account-input-row input.input-warning {
+    border-color: #f59e0b;
+    background: #fffbeb;
+}
+
+.account-input-row input.input-error {
+    border-color: #ef4444;
+    background: #fef2f2;
+}
+
+.validation-msg {
+    font-size: 0.78em;
+    color: #f59e0b;
+    margin-top: 2px;
+    width: 100%;
+}
+
+.validation-msg.error {
+    color: #ef4444;
+}
+
+/* ======================================
+   設定 - 予算設定行
+   ====================================== */
+.budget-setting-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.budget-setting-item .budget-cat-name {
+    min-width: 150px;
+    font-weight: 500;
+    color: #444;
+}
+
+.budget-setting-item input {
+    max-width: 160px;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-family: inherit;
+    text-align: right;
+}
+
+.budget-setting-item input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.budget-setting-item .budget-unit {
+    color: #888;
+}
+
+/* ======================================
+   設定 - 目標リスト
+   ====================================== */
+.goal-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: white;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+
+.goal-list-item .goal-info {
+    flex: 1;
+}
+
+.goal-list-item .goal-name {
+    font-weight: 500;
+    color: #444;
+}
+
+.goal-list-item .goal-detail {
+    font-size: 0.82em;
+    color: #888;
+    margin-top: 2px;
+}
+
+.add-goal-form {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+}
+
+/* ======================================
+   レスポンシブ追加
+   ====================================== */
+@media (max-width: 768px) {
+    .heatmap-calendar {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .comparison-selectors {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .comparison-vs {
+        text-align: center;
+        padding: 0;
+    }
+
+    .header-info {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .loan-countdown .countdown-progress {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .heatmap-calendar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .month-nav {
+        width: 30px;
+        height: 30px;
+        font-size: 0.85em;
+    }
+
+    .budget-setting-item {
+        flex-wrap: wrap;
+    }
+}
